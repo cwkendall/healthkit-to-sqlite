@@ -1,7 +1,7 @@
 from setuptools import setup
 import os
 
-VERSION = "0.3.2"
+VERSION = "0.3.3"
 
 
 def get_long_description():
@@ -26,7 +26,8 @@ setup(
         [console_scripts]
         healthkit-to-sqlite=healthkit_to_sqlite.cli:cli
     """,
-    install_requires=["sqlite-utils"],
+    install_requires=["sqlite-utils", "gpxpy"],
+    dependency_links=[],
     extras_require={"test": ["pytest"]},
     tests_require=["healthkit-to-sqlite[test]"],
 )

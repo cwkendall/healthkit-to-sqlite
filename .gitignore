@@ -6,3 +6,7 @@ venv
 .eggs
 .pytest_cache
 *.egg-info
+apple_health_export
+export.zip
+*.db
+*.db-journal
