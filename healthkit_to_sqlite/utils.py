@@ -78,12 +78,20 @@ def workout_to_db(workout, db, zf):
         for path in gpx_files:
             with open_file_or_zip(zf, path) as xml_file:
                 gpx = parse_gpx(xml_file)
-                for point in gpx.walk(only_points=True):
-                    points.append(dict(vars(point), workout_id=pk))
+                for point in gpx.walk(only_points=False):
+                    point[0].extensions = [etree_to_dict(e) for e in point[0].extensions]
+                    points.append(dict({key: getattr(point[0], key) for key in point[0].__slots__}, workout_id=pk))
     if len(points):
         db["workout_points"].insert_all(
             points, foreign_keys=[("workout_id", "workouts")], batch_size=50
         )
+
+
+def etree_to_dict(t):
+    d = {t.tag: list(map(etree_to_dict, list(t))) or t.text}
+    if t.attrib:
+        d.update({"@attr": t.attrib})
+    return d
 
 
 def open_file_or_zip(zf, file):
